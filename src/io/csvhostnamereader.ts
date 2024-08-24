@@ -1,8 +1,8 @@
-import { HostnameRecord } from './hostnamerecord';
-import { HostnameReader } from './hostnameprocessor';
+import { HostnameRecord } from '../hostname/hostnamerecord';
+import { HostnameReader } from '../hostname/hostnameprocessor';
 import fs from 'fs';
 import { parse } from 'csv-parse';
-import { logger } from './logging';
+import { logger } from '../utils/logging';
 import { finished } from 'stream/promises';
 
 class CsvHostnameReader implements HostnameReader {

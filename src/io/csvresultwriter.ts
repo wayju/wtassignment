@@ -1,8 +1,8 @@
-import { HostnameRecord } from './hostnamerecord';
-import { logger } from './logging';
+import { HostnameRecord } from '../hostname/hostnamerecord';
+import { logger } from '../utils/logging';
 import fs from 'fs';
 import { stringify } from 'csv-stringify';
-import { ResultWriter } from './hostnameprocessor';
+import { ResultWriter } from '../hostname/hostnameprocessor';
 
 class CsvResultWriter implements ResultWriter {
   private outStream: fs.WriteStream;

@@ -1,6 +1,6 @@
 import { HostnameRecord } from './hostnamerecord';
-import { logger } from './logging';
-import { fetchDNSRecord } from './googledoh';
+import { logger } from '../utils/logging';
+import { DNSFetcher } from '../dns/dns';
 
 interface ResultWriter {
   write(record: HostnameRecord): Promise<void>;
@@ -10,15 +10,6 @@ interface HostnameReader {
   readRecords(): Promise<HostnameRecord[]>;
 }
 
-async function processHostname(
-  hostname: HostnameRecord
-): Promise<HostnameRecord> {
-  const response = await fetchDNSRecord(hostname.hostname, 'A');
-  const aRecord = response.Answer?.find((a) => a.type == 1);
-
-  return new HostnameRecord(hostname.hostname, aRecord?.data ?? 'Hanging');
-}
-
 /// <summary>
 /// Processes a set of hostnames retrieved from the reader and then passed to the writer.
 /// </summary>
@@ -26,11 +17,18 @@ class HostnameProcessor {
   private batchSize: number;
   private writer: ResultWriter;
   private reader: HostnameReader;
+  private dnsFetcher: DNSFetcher;
 
-  constructor(batchSize: number, reader: HostnameReader, writer: ResultWriter) {
+  constructor(
+    batchSize: number,
+    reader: HostnameReader,
+    writer: ResultWriter,
+    dnsFetcher: DNSFetcher
+  ) {
     this.batchSize = batchSize;
     this.reader = reader;
     this.writer = writer;
+    this.dnsFetcher = dnsFetcher;
   }
 
   private async processHostnameRecord(
@@ -38,10 +36,17 @@ class HostnameProcessor {
   ): Promise<HostnameRecord> {
     try {
       logger.debug(`Processing hostname: ${record}`);
-      const r = await processHostname(record);
-      await this.writer.write(r);
-      logger.debug(`Processed hostname: ${record}, result: ${r}`);
-      return r;
+
+      const response = await this.dnsFetcher(record.hostname, 'A');
+      const aRecord = response.Answer?.find((a) => a.type == 1);
+      const updated = new HostnameRecord(
+        record.hostname,
+        aRecord?.data ?? 'Hanging'
+      );
+
+      await this.writer.write(updated);
+      logger.debug(`Processed hostname: ${record}, result: ${updated}`);
+      return updated;
     } catch (error) {
       logger.error(`error processing hostname, error: ${error}`);
       throw error;

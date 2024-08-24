@@ -1,11 +1,12 @@
 //Entrypoint for the application. Managaes the command line options and starts the processing of the input file.
 
 import { Command, Option, InvalidArgumentError } from 'commander';
-import { HostnameProcessor } from './hostnameprocessor';
-import { CsvHostnameReader } from './csvhostnamereader';
-import { CsvResultWriter } from './csvresultwriter';
-import { logger, setDebugLogging } from './logging';
+import { HostnameProcessor } from './hostname/hostnameprocessor';
+import { CsvHostnameReader } from './io/csvhostnamereader';
+import { CsvResultWriter } from './io/csvresultwriter';
+import { logger, setDebugLogging } from './utils/logging';
 import packageJson from '../package.json';
+import { dohFetchDNSRecord } from './dns/googledoh';
 
 const app = new Command();
 app.version(packageJson.version);
@@ -56,7 +57,8 @@ app.action(async (options) => {
     const hostnameprocessor = new HostnameProcessor(
       options.batch,
       hostnameReader,
-      resultWriter
+      resultWriter,
+      dohFetchDNSRecord
     );
     logger.info(
       `Processing file: '${options.file}', writing results to '${options.output}'`

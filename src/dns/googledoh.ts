@@ -1,20 +1,8 @@
-interface DNSRecord {
-  name: string;
-  type: number;
-  TTL: number;
-  data: string;
-}
-
-interface DNSResponse {
-  status: number;
-  TC: boolean;
-  Question: DNSRecord[];
-  Answer: DNSRecord[];
-}
+import { DNSResponse } from './dns';
 
 const dohUrl = 'https://dns.google/resolve';
 
-async function fetchDNSRecord(
+async function dohFetchDNSRecord(
   hostname: string,
   type: string
 ): Promise<DNSResponse> {
@@ -27,4 +15,4 @@ async function fetchDNSRecord(
   });
 }
 
-export { fetchDNSRecord };
+export { dohFetchDNSRecord };

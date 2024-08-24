@@ -16,8 +16,12 @@ const logger = createLogger({
   rejectionHandlers: [transport]
 });
 
+function setLogging(level: string) {
+  logger.level = level;
+}
+
 function setDebugLogging() {
-  logger.level = debugLevel;
+  setLogging(debugLevel);
 }
 
 export { logger, setDebugLogging };
