@@ -19,7 +19,9 @@ class CsvHostnameReader implements HostnameReader {
       logger.error(`Error reading from file, error: ${err}`);
     });
 
-    const parser = inStream.pipe(parse({ skip_empty_lines: true }));
+    const parser = inStream.pipe(
+      parse({ skip_empty_lines: true, relax_column_count: true })
+    );
 
     const records: HostnameRecord[] = [];
     parser.on('readable', async () => {
