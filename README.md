@@ -27,9 +27,9 @@ Don't use the Dockerfile without compose as it is not currently set up in a usef
 Docker compose is provided for development. The compose file will mount the project src and samples directory and run `npx tsc --watch` to watch for changes. Sample files are included for testing.
 
 1. `cd` to the project directory
-2. `docker compose -f docker-compose.dev.yml up`
-3. `docker compose -f docker-compose.dev.yml exec app sh -c "rm -f output.csv && node dist/index.js -F samples/example.csv -B 10"`
-4. `docker compose -f docker-compose.dev.yml exec app cat output.csv`
+2. `docker compose -f docker-compose.dev.yml up` - Brings the container up and monitors for changes to the source for recompiling. Continue developing and the changes will be reflected.
+3. `docker compose -f docker-compose.dev.yml exec app sh -c "rm -f output.csv && node dist/index.js -F samples/example.csv -B 10"` - Runs the application, removing any previous output file, processing the example.csv input file from the sample directory. The output will be written to the default `output.csv`.
+4. `docker compose -f docker-compose.dev.yml exec app cat output.csv` - prints the resulting output file to the console.
 
 To test a sample file not in the sample directory use the provided script to upload the input file, execute the application and output the result. Alternatively copy the commands from the script and modify appropriately if using windows. The script was adapted from one created by Chat GPT.
 
@@ -49,7 +49,7 @@ It is of course possible to run the application directly once node and typescrip
 
 ### Input and Output files
 
-Input and output files share the same csv format with the exception that IP address is not required for input files. No header line is required. Empty lines in the input file will be skipped. For multiple `A` records the IP addresses are separated by a space ` `.
+Input and output files share the same csv format with the exception that IP address is not required for input files. No header line is required. Empty lines in the input file will be skipped. For multiple **A** records the IP addresses are separated by a space ` `.
 
 e.g. 
 
@@ -61,7 +61,38 @@ wikipedia.com,103.102.166.226
 www.github.com,20.205.243.166
 www.atlassian.com
 ```
+### Error Handling
 
+If an error occurs while fetching the DNS record for a hostname then an error will be printed and the item excluded from the output. This will allso be reflected in the summary where the processed count will not match the hostnames. For instance if the network was completely down then the output would be something like: 
+
+```
+[2024-08-25T11:52:04.027Z] info: Processing file: 'samples/example.csv', writing results to 'output.csv'
+[2024-08-25T11:52:04.156Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.157Z] error: Error processing record www.google.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.158Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.158Z] error: Error processing record facebook.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.159Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.159Z] error: Error processing record www.amazon.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.160Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.160Z] error: Error processing record www.microsoft.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.161Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.161Z] error: Error processing record wikipedia.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.161Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.161Z] error: Error processing record www.apple.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.162Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.163Z] error: Error processing record www.netflix.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.163Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.163Z] error: Error processing record www.twitter.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.164Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.164Z] error: Error processing record www.github.com : , error: TypeError: fetch failed
+[2024-08-25T11:52:04.165Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.165Z] error: Error processing record www.nytimes.com : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.170Z] error: error processing hostname, error: TypeError: fetch failed
+[2024-08-25T11:52:04.170Z] error: Error processing record www.notarealhostname3748274832899323.co.nz : 1.1.1.1, error: TypeError: fetch failed
+[2024-08-25T11:52:04.170Z] info: Processed 0 of 11 hostnames
+[2024-08-25T11:52:04.170Z] info: Processing completed
+```
+Errors related to opening the input or output files will stop the application from running and errors will be output to the console.
 
 ## Notes
 
