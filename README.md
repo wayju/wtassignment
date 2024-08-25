@@ -26,25 +26,26 @@ Don't use the Dockerfile without compose as it is not currently setup in a usefu
 
 The docker compose setup outlined and configurations is for development using docker-compose. For development purposes the compose file will mount the project folder and run `npx tsc --watch` to watch for changes. The sample files will be included so it is possible to use these for execution.
 
-* `docker compose -f docker-compose.dev.yml up`
-* `docker compose -f docker-compose.dev.yml exec app rm -f output.csv && node dist/index.js -F samples/example.csv -B 10`
-* `docker compose -f docker-compose.dev.yml exec app cat output.csv`
+1 `cd` to the project directory
+2 `docker compose -f docker-compose.dev.yml up`
+3 `docker compose -f docker-compose.dev.yml exec app rm -f output.csv && node dist/index.js -F samples/example.csv -B 10`
+4 `docker compose -f docker-compose.dev.yml exec app cat output.csv`
 
 In order to use a different sample file use the provided script to upload the input file, execute the application and retrieve the result file. Alternatively copy the commands from the script and modify appropriately if using windows. Adapted from script created by Chat GPT.
 
-* `cd` to the project directory
-* `docker compose -f docker-compose.dev.yml up`
-* Ensure that `run.sh` is executable
-* `./run.sh someinputfile.csv`
+1 `cd` to the project directory
+2 `docker compose -f docker-compose.dev.yml up`
+3 Ensure that `run.sh` is executable
+4 `./run.sh someinputfile.csv`
 
 ##### Node
 
 It is of course possible to run the application directly once node and typescript are installed:
 
-* View the help command to see options `npm start -- -h`
-* Run the application `npm start -- -F samples/example.csv`
-* Run lint `npm run lint`
-* Run tests `npm test`
+1 View the help command to see options `npm start -- -h`
+2 Run the application `npm start -- -F samples/example.csv`
+3 Run lint `npm run lint`
+4 Run tests `npm test`
 
 ### Input and Output files
 
@@ -52,13 +53,13 @@ Input and output files share the same csv format with the exception that IP addr
 
 e.g. 
 
-`www.twitter.com,104.244.42.1 104.244.42.65 104.244.42.193 104.244.42.129
+```www.twitter.com,104.244.42.1 104.244.42.65 104.244.42.193 104.244.42.129
 www.netflix.com,44.234.232.238 44.237.234.25 44.242.60.85
 www.nytimes.com,151.101.1.164 151.101.65.164 151.101.193.164 151.101.129.164
 facebook.com,157.240.15.35
 wikipedia.com,103.102.166.226
 www.github.com,20.205.243.166
-www.atlassian.com`
+www.atlassian.com```
 
 
 ## Notes
