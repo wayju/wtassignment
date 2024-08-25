@@ -4,7 +4,6 @@ module.exports = {
     testMatch: ["**/?(*.)+(spec|test).ts"],
     collectCoverage: true,
     coverageReporters: [
-        "text",
-        "cobertura"
+        "text"
     ]
 };

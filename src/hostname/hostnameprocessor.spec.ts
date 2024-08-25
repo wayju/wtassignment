@@ -56,6 +56,27 @@ const stubbedDNSFetcher = async (hostname: string): Promise<DNSResponse> => {
             return DNSMapping('google.com', '4.4.4.4');
         case 'error.com':
             throw new Error('Error fetching DNS record.');
+        case 'microsoft.com':
+            const mapping = DNSMapping('microsoft.com', '20.70.246.20');
+            mapping.Answer?.push({
+                name: hostname,
+                type: 1,
+                TTL: 300,
+                data: '20.112.250.133'
+            });
+            mapping.Answer?.push({
+                name: hostname,
+                type: 1,
+                TTL: 300,
+                data: '20.131.239.246'
+            });
+            mapping.Answer?.push({
+                name: hostname,
+                type: 1,
+                TTL: 300,
+                data: '20.76.201.171'
+            });
+            return mapping
         default:
             return {
                 status: 3,
@@ -150,5 +171,28 @@ describe('Hostname processor', () => {
         expect(results.find((r) => r.hostname === 'sub.google.com')?.ip).toBe('3.3.3.3');
         expect(results.find((r) => r.hostname === 'facebook.com')?.hostname).toBe('facebook.com');
         expect(results.find((r) => r.hostname === 'facebook.com')?.ip).toBe('4.4.4.4');
+    });
+
+    it("Multiple IPs should be returned for multiple A records", async () => {
+        const reader = new StubbedHostnameReader([
+            new HostnameRecord('google.com', '1.1.1.1'),
+            new HostnameRecord('microsoft.com', '1.1.1.1'),
+        ]);
+        const writer = new StubbedResultWriter();
+        const hostnameprocessor = new HostnameProcessor(
+            10,
+            reader,
+            writer,
+            stubbedDNSFetcher
+        );
+        await hostnameprocessor.process();
+        const results = writer.getRecords();
+        expect(results.length).toBe(2);
+
+        //Not guarenteed to be in order
+        expect(results.find((r) => r.hostname === 'google.com')?.hostname).toBe('google.com');
+        expect(results.find((r) => r.hostname === 'google.com')?.ip).toBe('2.2.2.2');
+        expect(results.find((r) => r.hostname === 'microsoft.com')?.hostname).toBe('microsoft.com');
+        expect(results.find((r) => r.hostname === 'microsoft.com')?.ip).toBe('20.70.246.20 20.112.250.133 20.131.239.246 20.76.201.171');
     });
 });

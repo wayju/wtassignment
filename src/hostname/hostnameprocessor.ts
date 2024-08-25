@@ -38,10 +38,10 @@ class HostnameProcessor {
       logger.debug(`Processing hostname: ${record}`);
 
       const response = await this.dnsFetcher(record.hostname, 'A');
-      const aRecord = response.Answer?.find((a) => a.type == 1);
+      const aRecord = response.Answer?.filter((a) => a.type == 1)?.map((a) => a.data).join(' ');
       const updated = new HostnameRecord(
         record.hostname,
-        aRecord?.data ?? 'Hanging'
+        aRecord ?? 'Hanging'
       );
 
       await this.writer.write(updated);
