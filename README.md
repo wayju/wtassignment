@@ -26,17 +26,17 @@ Don't use the Dockerfile without compose as it is not currently setup in a usefu
 
 The docker compose setup outlined and configurations is for development using docker-compose. For development purposes the compose file will mount the project folder and run `npx tsc --watch` to watch for changes. The sample files will be included so it is possible to use these for execution.
 
-1 `cd` to the project directory
-2 `docker compose -f docker-compose.dev.yml up`
-3 `docker compose -f docker-compose.dev.yml exec app rm -f output.csv && node dist/index.js -F samples/example.csv -B 10`
-4 `docker compose -f docker-compose.dev.yml exec app cat output.csv`
+1. `cd` to the project directory
+2. `docker compose -f docker-compose.dev.yml up`
+3. `docker compose -f docker-compose.dev.yml exec app rm -f output.csv && node dist/index.js -F samples/example.csv -B 10`
+4. `docker compose -f docker-compose.dev.yml exec app cat output.csv`
 
 In order to use a different sample file use the provided script to upload the input file, execute the application and retrieve the result file. Alternatively copy the commands from the script and modify appropriately if using windows. Adapted from script created by Chat GPT.
 
-1 `cd` to the project directory
-2 `docker compose -f docker-compose.dev.yml up`
-3 Ensure that `run.sh` is executable
-4 `./run.sh someinputfile.csv`
+1. `cd` to the project directory
+2. `docker compose -f docker-compose.dev.yml up`
+3. Ensure that `run.sh` is executable
+4. `./run.sh someinputfile.csv`
 
 ##### Node
 
