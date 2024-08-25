@@ -1,6 +1,4 @@
-# Project Title
-
-Take home assignment for WT.
+# Take home assignment for WT
 
 ## Description
 
