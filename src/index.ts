@@ -26,9 +26,9 @@ const minParseInt = function (value: string) {
 //Console application definition and options.
 app.description(
   'Console application for fetching IP addresses for hostnames for the purpose of detecting changes. ' +
-  'Output will include both hostnames which have changed and those which have not. \n\n' +
-  ' Uses the google DoH api to fetch the IP Address from DNS A records.\n\nNote that results may not be returned in the same order as input.\n\n' +
-  'Multiple A records will be returned separated with a space.'
+    'Output will include both hostnames which have changed and those which have not. \n\n' +
+    ' Uses the google DoH api to fetch the IP Address from DNS A records.\n\nNote that results may not be returned in the same order as input.\n\n' +
+    'Multiple A records will be returned separated with a space.'
 );
 app.requiredOption(
   '-F, --file <filename>',

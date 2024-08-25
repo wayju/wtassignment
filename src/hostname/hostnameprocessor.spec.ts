@@ -56,7 +56,7 @@ const stubbedDNSFetcher = async (hostname: string): Promise<DNSResponse> => {
       return DNSMapping('google.com', '4.4.4.4');
     case 'error.com':
       throw new Error('Error fetching DNS record.');
-    case 'microsoft.com':
+    case 'microsoft.com': {
       const mapping = DNSMapping('microsoft.com', '20.70.246.20');
       mapping.Answer?.push({
         name: hostname,
@@ -77,6 +77,8 @@ const stubbedDNSFetcher = async (hostname: string): Promise<DNSResponse> => {
         data: '20.76.201.171'
       });
       return mapping;
+    }
+
     default:
       return {
         status: 3,

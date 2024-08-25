@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node dist/index.js",
+    "start": "tsc && rm -f output.csv && node dist/index.js",
     "lint": "eslint src",
     "test": "jest",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
