@@ -24,7 +24,7 @@ Don't use the Dockerfile without compose as it is not currently set up in a usef
 
 #### Docker Compose
 
-Docker compose is provided for development. The compose file will mount the project folder and run `npx tsc --watch` to watch for changes. Sample files are included for testing.
+Docker compose is provided for development. The compose file will mount the project src and samples directory and run `npx tsc --watch` to watch for changes. Sample files are included for testing.
 
 1. `cd` to the project directory
 2. `docker compose -f docker-compose.dev.yml up`
