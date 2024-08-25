@@ -11,7 +11,7 @@ CONTAINER_ID=$(docker-compose -f docker-compose.dev.yml ps -q app)
 docker cp $FILE_PATH $CONTAINER_ID:/app/samples/someinputfile.csv
 
 # Execute the command inside the container
-docker compose -f docker-compose.dev.yml exec app rm -f output.csv && node dist/index.js -F samples/someinputfile.csv -B 10
+docker compose -f docker-compose.dev.yml exec app sh -c "rm -f output.csv && node dist/index.js -F samples/someinputfile.csv -B 10"
 
 sleep 1
 

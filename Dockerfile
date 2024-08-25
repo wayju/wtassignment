@@ -12,7 +12,8 @@ RUN npx tsc
 FROM node:22-alpine AS production
 WORKDIR /app
 COPY package*.json .
-RUN npm ci --only=production
+COPY tsconfig.json .
+RUN npm ci
 COPY --from=build /app/dist ./dist
 
 CMD ["node", "dist/index.js"]

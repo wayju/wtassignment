@@ -28,7 +28,7 @@ Docker compose is provided for development. The compose file will mount the proj
 
 1. `cd` to the project directory
 2. `docker compose -f docker-compose.dev.yml up`
-3. `docker compose -f docker-compose.dev.yml exec app rm -f output.csv && node dist/index.js -F samples/example.csv -B 10`
+3. `docker compose -f docker-compose.dev.yml exec app sh -c "rm -f output.csv && node dist/index.js -F samples/example.csv -B 10"`
 4. `docker compose -f docker-compose.dev.yml exec app cat output.csv`
 
 To test a sample file not in the sample directory use the provided script to upload the input file, execute the application and output the result. Alternatively copy the commands from the script and modify appropriately if using windows. The script was adapted from one created by Chat GPT.

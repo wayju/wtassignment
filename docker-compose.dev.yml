@@ -2,5 +2,6 @@ services:
  app:
   build: .
   volumes:
-   - ./:/app
-  command: npx typescript --watch
+   - ./src:/app/src
+   - ./samples:/app/samples
+  command: npx tsc --watch
